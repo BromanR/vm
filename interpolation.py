@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.optimize as opt
 import scipy
+import sympy as sp
+import math
 
 n=6 #кол-во узлов
 xp=[-0.4, -0.2, -0.5, -0.6, 0, 0.1]
@@ -21,10 +23,21 @@ temp=yp[n-1]
 for i in range (0,n):
     temp=temp*(q-xp[n-i-1])+yp[n-i-1]  #считаем значение многочлена в нужной точке
 print ("полученное значение: ", temp) #полученное значение
-print ("разница с фактическим: ", temp-np.arcsin(q)) 
+print ("фактическая погрешность: ", temp-np.arcsin(q)) 
+
+x = sp.symbols('x')
+def fun(x):
+    return sp.asin(x)    
+#print(sp.diff(fun(x),x,6))
+
+def fc(x):
+    return 15*x*(63*x**4/(1 - x**2)**2 + 70*x**2/(1 - x**2) + 15)/(1 - x**2)**(7/2)
+
+maximum=opt.minimize_scalar(fc,bounds=(-0.6,0.1),method='bounded')
+print ("оценка модуля производной:", -maximum.fun)
+print ("оценка погрешности", (-maximum.fun*(q-xp[0])*(q-xp[1])*(q-xp[2])*(q-xp[3])*(q-xp[4])*(q-xp[5]))/math.factorial(n))
 
 
-max_x = opt.fmin_l_bfgs_b(np.arcin(xp[i]), 1.0, bounds=[(-1,1)],approx_grad=True)
 
 
 
