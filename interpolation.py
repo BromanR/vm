@@ -22,20 +22,23 @@ for k in range(1,n):
 temp=yp[n-1]
 for i in range (0,n):
     temp=temp*(q-xp[n-i-1])+yp[n-i-1]  #считаем значение многочлена в нужной точке
-print ("полученное значение: ", temp) #полученное значение
+print ("полученное значение: ", temp) 
 print ("фактическая погрешность: ", temp-np.arcsin(q)) 
 
 x = sp.symbols('x')
 def fun(x):
     return sp.asin(x)    
-#print(sp.diff(fun(x),x,6))
+#print(sp.diff(fun(x),x,6)) #6-ая производная от арксинуса
 
-def fc(x):
-    return 15*x*(63*x**4/(1 - x**2)**2 + 70*x**2/(1 - x**2) + 15)/(1 - x**2)**(7/2)
+def fc(x): return 15*x*(63*x**4/(1 - x**2)**2 + 70*x**2/(1 - x**2) + 15)/(1 - x**2)**(7/2) #это 6-ая производная от арксинуса
 
-maximum=opt.minimize_scalar(fc,bounds=(-0.6,0.1),method='bounded')
+#поиск максимума производной
+maximum=opt.minimize_scalar(fc,bounds=(-0.6,0.1),method='bounded') # по идее вместо fc должно стоять sp.diff(fun(x),x,6)), но я не знаю как это реализовать
 print ("оценка модуля производной:", -maximum.fun)
-print ("оценка погрешности", (-maximum.fun*(q-xp[0])*(q-xp[1])*(q-xp[2])*(q-xp[3])*(q-xp[4])*(q-xp[5]))/math.factorial(n))
+err=-maximum.fun
+for i in range (0,6):
+    err=err*(q-xp[i])
+print ("оценка погрешности", (err/math.factorial(n)))
 
 
 
