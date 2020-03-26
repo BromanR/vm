@@ -11,10 +11,8 @@ yp=[0 for i in  range(n)]
 i=0 
 while i<n:
     yp[i]=np.arcsin(xp[i])
-    #print (yp[i])
     i+=1
 q=-0.3 #question - искомый узел
-
 
 for k in range(1,n):
     for i in range(n-1,k-1,-1):
@@ -23,7 +21,7 @@ temp=yp[n-1]
 for i in range (0,n):
     temp=temp*(q-xp[n-i-1])+yp[n-i-1]  #считаем значение многочлена в нужной точке
 print ("полученное значение: ", temp) 
-print ("фактическая погрешность: ", temp-np.arcsin(q)) 
+print ("фактическая погрешность: ", abs(temp-np.arcsin(q))) 
 
 x = sp.symbols('x')
 def fun(x):
@@ -31,14 +29,15 @@ def fun(x):
 #print(sp.diff(fun(x),x,6)) #6-ая производная от арксинуса
 
 def fc(x): return 15*x*(63*x**4/(1 - x**2)**2 + 70*x**2/(1 - x**2) + 15)/(1 - x**2)**(7/2) #это 6-ая производная от арксинуса
+#функция нечетная -> найдя максимум - найдем минимум
 
 #поиск максимума производной
 maximum=opt.minimize_scalar(fc,bounds=(-0.6,0.1),method='bounded') # по идее вместо fc должно стоять sp.diff(fun(x),x,6)), но я не знаю как это реализовать
-print ("оценка модуля производной:", -maximum.fun)
+print ("оценка модуля производной:", abs(maximum.fun))
 err=-maximum.fun
 for i in range (0,6):
     err=err*(q-xp[i])
-print ("оценка погрешности", (err/math.factorial(n)))
+print ("оценка погрешности", (abs(err/math.factorial(n))))
 
 
 
