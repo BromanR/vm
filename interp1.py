@@ -5,23 +5,26 @@ import scipy
 import sympy as sp
 import math
 
-n=6 #кол-во узлов
+def interp (xp,yp,xq,n):  #xp, yp - узлы и значение функции в этих узлах соответственно, qx - искомый узел, n - кол-во узлов
+    for k in range(1,n):
+        for i in range(n-1,k-1,-1):
+            yp[i]=float(yp[i]-yp[i-1])/(xp[i]-xp[i-k]) #считаем р-р
+    temp=yp[n-1]
+    for i in range (0,n):
+       temp=temp*(xq-xp[n-i-1])+yp[n-i-1]  #считаем значение многочлена в нужной точке
+    return(temp) #возвращаем полученное значение
+
 xp=[-0.4, -0.2, -0.5, -0.6, 0, 0.1]
+n=len(xp)
 yp=[0 for i in  range(n)]
-i=0 
+i=0
 while i<n:
     yp[i]=np.arcsin(xp[i])
     i+=1
-q=-0.3 #question - искомый узел
-
-for k in range(1,n):
-    for i in range(n-1,k-1,-1):
-        yp[i]=float(yp[i]-yp[i-1])/(xp[i]-xp[i-k]) #считаем р-р
-temp=yp[n-1]
-for i in range (0,n):
-    temp=temp*(q-xp[n-i-1])+yp[n-i-1]  #считаем значение многочлена в нужной точке
-print ("полученное значение: ", temp) 
-print ("фактическая погрешность: ", abs(temp-np.arcsin(q))) 
+qx=-0.3 #qx - искомый узел       
+ans=interp(xp,yp,qx,n) 
+print ("полученное значение: ", ans) 
+print ("фактическая погрешность: ", abs(ans-np.arcsin(qx))) 
 
 x = sp.symbols('x')
 def fun(x):
@@ -36,7 +39,7 @@ maximum=opt.minimize_scalar(fc,bounds=(-0.6,0.1),method='bounded') # по иде
 print ("оценка модуля производной:", abs(maximum.fun))
 err=-maximum.fun
 for i in range (0,6):
-    err=err*(q-xp[i])
+    err=err*(qx-xp[i])
 print ("оценка погрешности", (abs(err/math.factorial(n))))
 
 
