@@ -4,16 +4,23 @@ import scipy.optimize as opt
 import scipy
 import sympy as sp
 import math
+from scipy.misc import derivative
 
-def interp (xp,yp,xq,n):  #xp, yp - узлы и значение функции в этих узлах соответственно, qx - искомый узел, n - кол-во узлов
+def DivDiff(yp,xp): #разделенные разности yp
     for k in range(1,n):
         for i in range(n-1,k-1,-1):
-            yp[i]=float(yp[i]-yp[i-1])/(xp[i]-xp[i-k]) #считаем р-р
+            yp[i]=float(yp[i]-yp[i-1])/(xp[i]-xp[i-k]) 
+            
+def interp (xp,yp,xq,n):  #xp, yp - узлы и значение функции в этих узлах соответственно, qx - искомый узел, n - кол-во узлов
+    DivDiff(yp,xp)
     temp=yp[n-1]
     for i in range (0,n-1):
        temp=temp*(xq-xp[n-i-2])+yp[n-i-2]  #считаем значение многочлена в нужной точке
     return(temp) #возвращаем получе нное значение
 
+def fun(x):
+    return sp.asin(x) 
+        
 xp=[-0.4, -0.2, -0.5, -0.6, 0, 0.1]
 n=len(xp)
 yp=[0 for i in  range(n)]
@@ -26,11 +33,7 @@ ans=interp(xp,yp,qx,n)
 print ("полученное значение: ", ans) 
 print ("фактическая погрешность: ", abs(ans-np.arcsin(qx))) 
 
-x = sp.symbols('x')
-def fun(x):
-    return sp.asin(x)    
 #print(sp.diff(fun(x),x,6)) #6-ая производная от арксинуса
-
 def fc(x): return 15*x*(63*x**4/(1 - x**2)**2 + 70*x**2/(1 - x**2) + 15)/(1 - x**2)**(7/2) #это 6-ая производная от арксинуса
 #функция нечетная -> найдя максимум - найдем минимум
 
