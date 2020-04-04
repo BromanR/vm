@@ -10,9 +10,9 @@ def interp (xp,yp,xq,n):  #xp, yp - узлы и значение функции 
         for i in range(n-1,k-1,-1):
             yp[i]=float(yp[i]-yp[i-1])/(xp[i]-xp[i-k]) #считаем р-р
     temp=yp[n-1]
-    for i in range (0,n):
-       temp=temp*(xq-xp[n-i-1])+yp[n-i-1]  #считаем значение многочлена в нужной точке
-    return(temp) #возвращаем полученное значение
+    for i in range (0,n-1):
+       temp=temp*(xq-xp[n-i-2])+yp[n-i-2]  #считаем значение многочлена в нужной точке
+    return(temp) #возвращаем получе нное значение
 
 xp=[-0.4, -0.2, -0.5, -0.6, 0, 0.1]
 n=len(xp)
