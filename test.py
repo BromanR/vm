@@ -1,7 +1,9 @@
 import numpy as np
 import math
+n=3
+yp=[1,2,3]
+h=0.1
+num1_d_yp=[]
 
-b = np.array([[2, 3, 4], [5, 7]])
-print (b)
-b[1]=b[1]+[2]
-print (b)
+for i in range (n-1):
+    num1_d_yp.append((yp[i+1]-yp[i])/h)
