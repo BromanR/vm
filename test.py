@@ -2,8 +2,10 @@ import numpy as np
 import math
 n=3
 yp=[1,2,3]
-h=0.1
-num1_d_yp=[]
+xq=-0.3
+xp=[-0.4, -0.2, -0.5, -0.6, 0, 0.1]
 
-for i in range (n-1):
-    num1_d_yp.append((yp[i+1]-yp[i])/h)
+def sortByDistance(a):
+        return (abs(xq-a))
+xp.sort(key=sortByDistance)
+print (xp)
